@@ -1,13 +1,9 @@
 // tests/subjects.test.ts
 import { beforeEach, describe, expect, it } from "bun:test";
-import { Elysia } from "elysia";
-import { subjectRouter } from "../src/routes/subject.router";
 import { cleanDatabase } from "./utils";
-import { testSetup } from "./shared";
+import app from "../src/app";
 
 describe("Subjects API", () => {
-  const app = new Elysia().use(testSetup).use(subjectRouter);
-
   beforeEach(async () => {
     await cleanDatabase();
   });

@@ -1,6 +1,6 @@
 // src/controllers/subject.router.ts
 import { Elysia, t } from "elysia";
-import { createSubject, updateSubject } from "../models/subject.model";
+import { createSubject, subject, updateSubject } from "../models/subject.model";
 import { setup } from "../setup";
 import { OpenAPIV3 } from "openapi-types";
 
@@ -170,7 +170,7 @@ export const subjectRouter = new Elysia({
 })
   .use(setup)
   .post(
-    "/subjects",
+    "/",
     async ({ body, subjectService, set }) => {
       set.status = 201;
       return await subjectService.create(body);
@@ -182,6 +182,16 @@ export const subjectRouter = new Elysia({
         summary: "Create a new subject",
         description:
           "Retrieves a list of all todo items. The response includes the todo ID, title, description, completion status, and creation date.",
+        responses: {
+          201: {
+            description: "Created",
+            content: {
+              "application/json": {
+                schema: subject,
+              },
+            },
+          },
+        },
       },
     }
   )

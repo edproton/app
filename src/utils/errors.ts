@@ -43,10 +43,10 @@ export const errorHandler = () => {
     })
     .onError(({ code, error, set }) => {
       // Log the error with timestamp
-      // console.error(
-      //   `[${new Date().toISOString()}] [${code}]:`,
-      //   error.message || error
-      // );
+      console.error(
+        `[${new Date().toISOString()}] [${code}]:`,
+        error.message || error
+      );
 
       switch (code) {
         case "NOT_FOUND":

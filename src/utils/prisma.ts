@@ -1,7 +1,6 @@
-import { PrismaClient } from "@prisma/client/edge";
 import { withPulse } from "@prisma/extension-pulse";
 import { env } from "bun";
-import { Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient().$extends(
   withPulse({
