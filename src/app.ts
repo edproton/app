@@ -10,6 +10,11 @@ const app = new Elysia()
   .use(
     swagger({
       documentation: {
+        info: {
+          title: "XCELTUTORS API",
+          description: "API for managing the tutoring system",
+          version: "1.0.0",
+        },
         tags: [
           {
             name: "Subjects",
@@ -37,14 +42,6 @@ const app = new Elysia()
             },
           },
           responses: commonResponses, // Define reusable responses
-        },
-      },
-      scalarConfig: {
-        // Add this configuration
-        openapi: "3.0.0",
-        info: {
-          title: "Your API",
-          version: "1.0.0",
         },
       },
     })
