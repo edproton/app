@@ -1,174 +1,49 @@
-// src/controllers/subject.router.ts
+// subject.model.ts
 import { Elysia, t } from "elysia";
-import { createSubject, subject, updateSubject } from "../models/subject.model";
 import { setup } from "../setup";
-import { OpenAPIV3 } from "openapi-types";
+import { commonResponses } from "./shared";
 
-// Base error schema that can be reused
-export const baseErrorSchema = t.Object({
-  status: t.Integer({
-    examples: [500],
-    description: "The HTTP status code",
+export type Subject = typeof subject.static;
+export const subject = t.Object({
+  id: t.String({
+    description: "The unique identifier for the subject",
+    pattern:
+      "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+    examples: [
+      "123e4567-e89b-12d3-a456-426614174000",
+      "123e4567-e89b-12d3-a456-426614174001",
+    ],
   }),
-  code: t.String({
-    examples: ["ERROR_CODE"],
-    description: "The error code",
-  }),
-  message: t.String({
-    examples: ["Error message"],
-    description: "The error message",
+  name: t.String({
+    description: "The name of the subject",
+    minLength: 1,
+    maxLength: 30,
+    examples: ["Mathematics", "Science"],
   }),
 });
 
-export const badRequestError = t.Object({
-  ...baseErrorSchema.properties,
-  status: t.Literal(400, {
-    examples: [400],
-    description: "Bad Request status code",
-  }),
-  code: t.Literal("BAD_REQUEST", {
-    examples: ["BAD_REQUEST"],
-    description: "Bad request error code",
-  }),
-  details: t.Array(
-    t.Object({
-      field: t.String({
-        examples: ["title"],
-        description: "The field that caused the error",
-      }),
-      info: t.String({
-        examples: ["The title field is required"],
-        description: "The error message for the field",
-      }),
-    }),
-    {
-      description: "An array of field errors",
-    }
-  ),
-  message: t.Literal("Invalid request payload", {
-    examples: ["Invalid request payload"],
-    description: "Standard bad request error message",
-  }),
+export type CreateSubject = typeof createSubject.static;
+export const createSubject = t.Composite([t.Omit(subject, ["id"])]);
+
+export type UpdateSubject = typeof updateSubject.static;
+export const updateSubject = t.Composite([t.Omit(subject, ["id"])]);
+
+// Create a model plugin
+export const subjectModel = new Elysia().model({
+  subject: subject,
+  "subject.create": createSubject,
+  "subject.update": updateSubject,
 });
 
-export const unauthorizedError = t.Object({
-  ...baseErrorSchema.properties,
-  status: t.Literal(401, {
-    examples: [401],
-    description: "Unauthorized status code",
-  }),
-  code: t.Literal("UNAUTHORIZED", {
-    examples: ["UNAUTHORIZED"],
-    description: "Authentication error code",
-  }),
-  message: t.Literal("You are not authorized to access this resource", {
-    examples: ["You are not authorized to access this resource"],
-    description: "Standard unauthorized error message",
-  }),
-});
-
-export const forbiddenError = t.Object({
-  ...baseErrorSchema.properties,
-  status: t.Literal(403, {
-    examples: [403],
-    description: "Forbidden status code",
-  }),
-  code: t.Literal("FORBIDDEN", {
-    examples: ["FORBIDDEN"],
-    description: "Permission error code",
-  }),
-  message: t.Literal("You don't have permission to access this resource", {
-    examples: ["You don't have permission to access this resource"],
-    description: "Standard forbidden error message",
-  }),
-});
-
-export const notFoundError = t.Object({
-  ...baseErrorSchema.properties,
-  status: t.Literal(404, {
-    examples: [404],
-    description: "Not Found status code",
-  }),
-  code: t.Literal("NOT_FOUND", {
-    examples: ["NOT_FOUND"],
-    description: "Resource not found error code",
-  }),
-  message: t.String({
-    examples: ["The requested resource was not found"],
-    description: "Standard not found error message",
-  }),
-});
-
-export const internalServerError = t.Object({
-  ...baseErrorSchema.properties,
-  status: t.Literal(500, {
-    examples: [500],
-    description: "Internal Server Error status code",
-  }),
-  code: t.Literal("INTERNAL_SERVER_ERROR", {
-    examples: ["INTERNAL_SERVER_ERROR"],
-    description: "Internal server error code",
-  }),
-  message: t.Literal(
-    "An unexpected error occurred while processing your request",
-    {
-      examples: ["An unexpected error occurred while processing your request"],
-      description: "Standard internal server error message",
-    }
-  ),
-});
-
-export const commonResponses: OpenAPIV3.ResponsesObject = {
-  400: {
-    description: "Bad Request",
-    content: {
-      "application/json": {
-        schema: badRequestError,
-      },
-    },
-  },
-  401: {
-    description: "Unauthorized",
-    content: {
-      "application/json": {
-        schema: unauthorizedError,
-      },
-    },
-  },
-  403: {
-    description: "Forbidden",
-    content: {
-      "application/json": {
-        schema: forbiddenError,
-      },
-    },
-  },
-  404: {
-    description: "Not Found",
-    content: {
-      "application/json": {
-        schema: notFoundError,
-      },
-    },
-  },
-  500: {
-    description: "Internal Server Error",
-    content: {
-      "application/json": {
-        schema: internalServerError,
-      },
-    },
-  },
-};
-
+// subject.router.ts
 export const subjectRouter = new Elysia({
   prefix: "/subjects",
   detail: {
     tags: ["Subjects"],
-    responses: commonResponses,
   },
 })
   .use(setup)
+  .use(subjectModel)
   .post(
     "/",
     async ({ body, subjectService, set }) => {
@@ -176,15 +51,15 @@ export const subjectRouter = new Elysia({
       return await subjectService.create(body);
     },
     {
-      body: createSubject,
-      status: 201,
+      body: "subject.create",
       detail: {
         summary: "Create a new subject",
         description:
-          "Retrieves a list of all todo items. The response includes the todo ID, title, description, completion status, and creation date.",
+          "Creates a new subject with the provided data. Returns the created subject object including its generated ID and metadata.",
         responses: {
+          ...commonResponses,
           201: {
-            description: "Created",
+            description: "Subject created successfully",
             content: {
               "application/json": {
                 schema: subject,
@@ -202,9 +77,20 @@ export const subjectRouter = new Elysia({
     },
     {
       detail: {
-        summary: "Create a new subject",
+        summary: "Get all subjects",
         description:
-          "Retrieves a list of all todo items. The response includes the todo ID, title, description, completion status, and creation date.",
+          "Retrieves a list of all subjects. The response includes each subject's ID and associated data.",
+        responses: {
+          ...commonResponses,
+          200: {
+            description: "Subjects retrieved successfully",
+            content: {
+              "application/json": {
+                schema: t.Array(subject),
+              },
+            },
+          },
+        },
       },
     }
   )
@@ -223,9 +109,20 @@ export const subjectRouter = new Elysia({
     },
     {
       detail: {
-        summary: "Create a new subject",
+        summary: "Get a subject by ID",
         description:
-          "Retrieves a list of all todo items. The response includes the todo ID, title, description, completion status, and creation date.",
+          "Retrieves a specific subject by its unique identifier. Returns the complete subject data if found.",
+        responses: {
+          ...commonResponses,
+          200: {
+            description: "Subject retrieved successfully",
+            content: {
+              "application/json": {
+                schema: subject,
+              },
+            },
+          },
+        },
       },
     }
   )
@@ -235,15 +132,52 @@ export const subjectRouter = new Elysia({
       return await subjectService.update(id, body);
     },
     {
-      body: updateSubject,
+      body: "subject.update",
       detail: {
-        summary: "Create a new subject",
+        summary: "Update a subject",
         description:
-          "Retrieves a list of all todo items. The response includes the todo ID, title, description, completion status, and creation date.",
+          "Updates an existing subject with the provided data. Returns the updated subject object.",
+        responses: {
+          ...commonResponses,
+          200: {
+            description: "Subject updated successfully",
+            content: {
+              "application/json": {
+                schema: subject,
+              },
+            },
+          },
+        },
       },
     }
   )
-  .delete("/:id", async ({ params: { id }, subjectService }) => {
-    await subjectService.delete(id);
-    return { success: true };
-  });
+  .delete(
+    "/:id",
+    async ({ params: { id }, subjectService }) => {
+      await subjectService.delete(id);
+      return { success: true };
+    },
+    {
+      detail: {
+        summary: "Delete a subject",
+        description:
+          "Deletes an existing subject by its ID. Returns a success confirmation.",
+        responses: {
+          ...commonResponses,
+          200: {
+            description: "Subject deleted successfully",
+            content: {
+              "application/json": {
+                schema: t.Object({
+                  success: t.Boolean({
+                    description: "Indicates if the deletion was successful",
+                    examples: [true],
+                  }),
+                }),
+              },
+            },
+          },
+        },
+      },
+    }
+  );

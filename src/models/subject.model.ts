@@ -1,4 +1,4 @@
-import { t } from "elysia";
+import { Elysia, t } from "elysia";
 
 export type Subject = typeof subject.static;
 export const subject = t.Object({
@@ -24,3 +24,10 @@ export const createSubject = t.Composite([t.Omit(subject, ["id"])]);
 
 export type UpdateSubject = typeof updateSubject.static;
 export const updateSubject = t.Composite([t.Omit(subject, ["id"])]);
+
+// Create a model plugin
+export const subjectModel = new Elysia().model({
+  subject: subject,
+  "subject.create": createSubject,
+  "subject.update": updateSubject,
+});

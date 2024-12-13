@@ -20,11 +20,21 @@ const app = new Elysia()
             name: "Subjects",
             description: "Operations about subjects",
           },
+          {
+            name: "Health",
+            description: "Health check operations",
+          },
         ],
       },
     })
   )
   .use(subjectRouter)
-  .get("/health", "Health check");
+  .get("/health", "Health check", {
+    detail: {
+      description: "Check the health of the API",
+      summary: "Health check",
+      tags: ["Health"],
+    },
+  });
 
 export default app;
