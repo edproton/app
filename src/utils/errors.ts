@@ -1,5 +1,5 @@
 import { env } from "bun";
-import { Elysia, ValidationError } from "elysia";
+import { Elysia, t, ValidationError } from "elysia";
 
 // Error response types
 interface ErrorResponseBase {
@@ -134,6 +134,39 @@ export const errorHandler = () => {
     });
 };
 
+const errorSchema = {
+  validationError: t.Object({
+    status: t.Integer(),
+    code: t.String(),
+    message: t.String(),
+    errors: t.Array(
+      t.Object({
+        field: t.String(),
+        info: t.String(),
+      })
+    ),
+  }),
+  notFound: t.Object({
+    status: t.Integer(),
+    code: t.String(),
+    message: t.String(),
+  }),
+  forbidden: t.Object({
+    status: t.Integer(),
+    code: t.String(),
+    message: t.String(),
+  }),
+  unauthorized: t.Object({
+    status: t.Integer(),
+    code: t.String(),
+    message: t.String(),
+  }),
+  internalServerError: t.Object({
+    status: t.Integer(),
+    code: t.String(),
+    message: t.String(),
+  }),
+};
 // Export custom errors and types
 export {
   AuthorizationError,
@@ -141,4 +174,5 @@ export {
   type ErrorResponseBase,
   type ValidationErrorResponse,
   type ValidationErrorDetail,
+  errorSchema,
 };
