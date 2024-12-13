@@ -15,8 +15,4 @@ RUN bunx prisma generate --no-engine
 # Copy the rest of the application
 COPY . .
 
-EXPOSE 3000
-
-ENV NODE_ENV=production
-
 CMD bun run start
