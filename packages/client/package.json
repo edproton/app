@@ -1,0 +1,18 @@
+{
+  "name": "@xcel/client",
+  "version": "0.0.1",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "generate": "bun run scripts/generate.ts",
+    "clean": "rm -rf .turbo node_modules dist"
+  },
+  "config": {
+    "backendEntryPoint": "apps/backend/src/index.ts"
+  },
+  "devDependencies": {
+    "@hey-api/client-fetch": "^0.5.4",
+    "@hey-api/openapi-ts": "^0.59.2",
+    "typescript": "^5.0.0"
+  }
+}

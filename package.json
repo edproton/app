@@ -1,23 +1,21 @@
 {
-  "name": "app",
-  "version": "1.0.50",
-  "module": "src/index.js",
-  "dependencies": {
-    "@elysiajs/swagger": "^1.1.6",
-    "@prisma/client": "^6.0.1",
-    "@prisma/extension-pulse": "^1.2.0",
-    "elysia": "^1.1.26"
-  },
+  "name": "@xcel/root",
+  "private": true,
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
-    "start": "bun run src/index.ts",
-    "test": "bun test",
-    "generate": "bun run bun run openapi-ts"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "generate": "turbo run generate",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "test:backend": "cd apps/backend && bun test"
   },
   "devDependencies": {
-    "@hey-api/client-fetch": "^0.5.4",
-    "@hey-api/openapi-ts": "^0.59.2",
-    "@types/bun": "^1.1.14",
-    "prisma": "^6.0.1"
-  }
+    "turbo": "^1.12.4"
+  },
+  "packageManager": "bun@1.0.26",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

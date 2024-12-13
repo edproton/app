@@ -1,0 +1,20 @@
+{
+  "name": "@xcel/backend",
+  "version": "1.0.50",
+  "module": "src/index.js",
+  "dependencies": {
+    "@elysiajs/swagger": "^1.1.6",
+    "@prisma/client": "^6.0.1",
+    "@prisma/extension-pulse": "^1.2.0",
+    "elysia": "^1.1.26"
+  },
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "test": "cd $(pwd) && bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "prisma": "^6.0.1"
+  }
+}
