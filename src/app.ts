@@ -1,11 +1,11 @@
 import { Elysia } from "elysia";
-import { PrismaClient } from "@prisma/client";
-import { commonResponses, subjectRouter } from "./routes/subject.router";
+import { subjectRouter } from "./routes/subject.router";
 import { errorHandler } from "./utils/errors";
 import swagger from "@elysiajs/swagger";
+import { prisma } from "./utils/prisma";
 
 const app = new Elysia()
-  .decorate("db", new PrismaClient())
+  .decorate("db", prisma)
   .use(errorHandler)
   .use(
     swagger({
@@ -21,28 +21,6 @@ const app = new Elysia()
             description: "Operations about subjects",
           },
         ],
-        components: {
-          schemas: {
-            Error: {
-              type: "object",
-              properties: {
-                status: {
-                  type: "integer",
-                  description: "The HTTP status code",
-                },
-                code: {
-                  type: "string",
-                  description: "The error code",
-                },
-                message: {
-                  type: "string",
-                  description: "The error message",
-                },
-              },
-            },
-          },
-          responses: commonResponses, // Define reusable responses
-        },
       },
     })
   )

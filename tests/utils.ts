@@ -1,5 +1,6 @@
 // tests/utils.ts
-import { PrismaClient } from "@prisma/client";
+
+import { PrismaClient } from "../src/utils/prisma";
 
 const prisma = new PrismaClient();
 

@@ -1,12 +1,10 @@
 // src/setup.ts
 import { Elysia } from "elysia";
-import { PrismaClient } from "@prisma/client";
 import { SubjectService } from "./services/subject.service";
 import { t } from "elysia";
+import { prisma } from "./utils/prisma";
 
 // Create PrismaClient instance
-const prisma = new PrismaClient();
-
 export const setup = new Elysia({ name: "app.setup" })
   .decorate("db", prisma)
   .decorate("subjectService", new SubjectService(prisma))

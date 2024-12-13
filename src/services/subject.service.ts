@@ -1,10 +1,10 @@
 // src/services/subject.service.ts
 import { NotFoundError } from "elysia";
-import { Prisma, PrismaClient } from "@prisma/client";
 import { CreateSubject, Subject, UpdateSubject } from "../models/subject.model";
+import { PrismaType, Prisma } from "../utils/prisma";
 
 export class SubjectService {
-  constructor(private readonly prisma: PrismaClient) {}
+  constructor(private readonly prisma: PrismaType) {}
 
   async findAll(): Promise<Subject[]> {
     return await this.prisma.subject.findMany();

@@ -5,6 +5,7 @@
   "dependencies": {
     "@elysiajs/swagger": "^1.1.6",
     "@prisma/client": "^6.0.1",
+    "@prisma/extension-pulse": "^1.2.0",
     "elysia": "^1.1.26"
   },
   "scripts": {
