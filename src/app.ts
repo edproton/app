@@ -46,6 +46,7 @@ const app = new Elysia()
       },
     })
   )
-  .use(subjectRouter);
+  .use(subjectRouter)
+  .get("/health", "Health check");
 
 export default app;
