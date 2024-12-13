@@ -1,18 +1,19 @@
 {
   "name": "app",
   "version": "1.0.50",
-  "scripts": {
-    "dev": "wrangler dev src/index.ts",
-    "deploy": "wrangler deploy --minify src/index.ts"
-  },
+  "module": "src/index.js",
   "dependencies": {
     "@elysiajs/swagger": "^1.1.6",
-    "elysia": "^1.1.26",
-    "wrangler": "^3.95.0"
+    "@prisma/client": "^6.0.1",
+    "elysia": "^1.1.26"
+  },
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts",
+    "test": "bun test"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20241205.0",
-    "bun-types": "^1.1.38"
-  },
-  "module": "src/index.js"
+    "@types/bun": "^1.1.14",
+    "prisma": "^6.0.1"
+  }
 }

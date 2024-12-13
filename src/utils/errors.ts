@@ -1,3 +1,4 @@
+import { env } from "bun";
 import { Elysia, ValidationError } from "elysia";
 
 // Error response types
@@ -122,7 +123,7 @@ export const errorHandler = () => {
         case "UNKNOWN":
         default:
           set.status = 500;
-          const isProduction = process.env.NODE_ENV === "production";
+          const isProduction = env.NODE_ENV === "production";
           return {
             status: 500,
             message: isProduction ? "Internal server error" : error.message,
