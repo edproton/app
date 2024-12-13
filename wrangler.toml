@@ -1,0 +1,5 @@
+name = "elysia-bun"
+compatibility_date = "2023-12-01"
+
+[observability.logs]
+enabled = true

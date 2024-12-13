@@ -2,14 +2,17 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
-    "elysia": "latest"
+    "@elysiajs/swagger": "^1.1.6",
+    "elysia": "^1.1.26",
+    "wrangler": "^3.95.0"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "bun-types": "^1.1.38"
   },
   "module": "src/index.js"
 }
