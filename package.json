@@ -11,9 +11,12 @@
   "scripts": {
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "generate": "bun run bun run openapi-ts"
   },
   "devDependencies": {
+    "@hey-api/client-fetch": "^0.5.4",
+    "@hey-api/openapi-ts": "^0.59.2",
     "@types/bun": "^1.1.14",
     "prisma": "^6.0.1"
   }
