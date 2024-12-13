@@ -6,10 +6,16 @@ export const subject = t.Object({
     description: "The unique identifier for the subject",
     pattern:
       "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$",
+    examples: [
+      "123e4567-e89b-12d3-a456-426614174000",
+      "123e4567-e89b-12d3-a456-426614174001",
+    ],
   }),
   name: t.String({
     description: "The name of the subject",
     minLength: 1,
+    maxLength: 30,
+    examples: ["Mathematics", "Science"],
   }),
 });
 
